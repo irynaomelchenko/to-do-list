@@ -225,22 +225,17 @@ const tasks = [];
     }
   }
 
-  function markTask(id) {
-    const { title } = objOfTasks[id];
-    const isConfirm = confirm(`Вы действительно хотите отметить задачу:\n${title}\nвыполненной?`);
+  // function markTask(id) {
+  //   const { title } = objOfTasks[id];
+  //   const isConfirm = confirm(`Вы подтверждаете выполнение задачу:\n${title}\nвыполненной?`);
 
-    if (!isConfirm) return isConfirm;
+  //   if (!isConfirm) return isConfirm;
     
-    return isConfirm;
-  }
+  //   return isConfirm;
+  // }
 
-  function markTaskInHtml(confirmed, el) {
-    // if (!confirmed) return;
-    // el.style.backgroundColor = '#bcdcff';
-    // el.childNodes[3].textContent = 'Undone!'
-    if (!confirmed) {
-      return;
-    } else if (el.childNodes[3].textContent === 'Undone!')  {
+  function markTaskInHtml(el) {
+    if (el.childNodes[3].textContent === 'Undone!')  {
         el.style.backgroundColor = '#fff';
         el.childNodes[3].textContent = 'Done!'
     } else if (el.childNodes[3].textContent === 'Done!') {
@@ -253,13 +248,12 @@ const tasks = [];
     if (target.classList.contains('done-btn')) {
       const parent = target.closest('[data-task-id]');
       const id = parent.dataset.taskId;
-      const confirmed = markTask(id);
-        if (objOfTasks[id].completed === false) {
-          objOfTasks[id].completed = true;
-        } else {
-          objOfTasks[id].completed = false;
-        }      
-      markTaskInHtml(confirmed, parent);    
+      if (objOfTasks[id].completed === false) {
+        objOfTasks[id].completed = true;
+      } else {
+        objOfTasks[id].completed = false;
+      }      
+      markTaskInHtml(parent);    
     }
   }
 
