@@ -235,8 +235,18 @@ const tasks = [];
   }
 
   function markTaskInHtml(confirmed, el) {
-    if (!confirmed) return;
-    el.style.backgroundColor = '#bcdcff';
+    // if (!confirmed) return;
+    // el.style.backgroundColor = '#bcdcff';
+    // el.childNodes[3].textContent = 'Undone!'
+    if (!confirmed) {
+      return;
+    } else if (el.childNodes[3].textContent === 'Undone!')  {
+        el.style.backgroundColor = '#fff';
+        el.childNodes[3].textContent = 'Done!'
+    } else if (el.childNodes[3].textContent === 'Done!') {
+        el.style.backgroundColor = '#bcdcff';
+        el.childNodes[3].textContent = 'Undone!'
+    }
   }
 
   function onDoneHandler({ target }) {
@@ -244,8 +254,12 @@ const tasks = [];
       const parent = target.closest('[data-task-id]');
       const id = parent.dataset.taskId;
       const confirmed = markTask(id);
-      objOfTasks[id].completed = true;
-      markTaskInHtml(confirmed, parent);
+        if (objOfTasks[id].completed === false) {
+          objOfTasks[id].completed = true;
+        } else {
+          objOfTasks[id].completed = false;
+        }      
+      markTaskInHtml(confirmed, parent);    
     }
   }
 
