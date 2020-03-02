@@ -270,7 +270,7 @@ const tasks = [];
 
   function onThemeSelectHandler(e) {
     const selectedTheme = themeSelect.value;
-    const isComfirmed = confirm(`Do you want to set ${selectedTheme}?`);
+    const isComfirmed = confirm(`Do you want to set ${selectedTheme} theme?`);
     if (!isComfirmed) {
       themeSelect.value = lastSelectedTheme;
       return;
