@@ -171,7 +171,7 @@ const tasks = [];
     const bodyValue = inputBody.value;
 
     if (!titleValue || !bodyValue) {
-      alert('Пожалуйста введите title и body');
+      alert('Enter title and body please');
       return;
     }
 
@@ -201,7 +201,7 @@ const tasks = [];
 
   function deleteTask(id) {
     const { title } = objOfTasks[id];
-    const isConfirm = confirm(`Вы действительно хотите удалить задачу: ${title}?`);
+    const isConfirm = confirm(`Do you want to delete this task: ${title}?`);
     if (!isConfirm) return isConfirm;
     delete objOfTasks[id];
     if (Object.keys(objOfTasks).length === 0) {
@@ -224,15 +224,6 @@ const tasks = [];
       deleteTaskFromHtml(confirmed, parent);  
     }
   }
-
-  // function markTask(id) {
-  //   const { title } = objOfTasks[id];
-  //   const isConfirm = confirm(`Вы подтверждаете выполнение задачу:\n${title}\nвыполненной?`);
-
-  //   if (!isConfirm) return isConfirm;
-    
-  //   return isConfirm;
-  // }
 
   function markTaskInHtml(el) {
     if (el.childNodes[3].textContent === 'Undone!')  {
