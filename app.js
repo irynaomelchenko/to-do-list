@@ -239,7 +239,9 @@ const tasks = [];
         listContainer.append(el)
       }
     } else if (incompleteTasksBtn.classList.contains('active-btn')) {
-      el.setAttribute('style', 'display: none!important')
+      el.setAttribute('style', 'display: none!important');
+      el.remove();
+      listContainer.append(el)
     }
     
   }
