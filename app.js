@@ -231,6 +231,8 @@ const tasks = [];
         el.style.backgroundColor = '#fff';
         el.childNodes[3].textContent = 'Done!';
         el.childNodes[3].classList.remove('completed')
+        el.remove();
+        listContainer.prepend(el)
       } else if (el.childNodes[3].textContent === 'Done!') {
         el.style.backgroundColor = '#bcdcff';
         el.childNodes[3].textContent = 'Undone!';  
