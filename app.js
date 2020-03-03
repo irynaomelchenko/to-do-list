@@ -226,13 +226,22 @@ const tasks = [];
   }
 
   function markTaskInHtml(el) {
-    if (el.childNodes[3].textContent === 'Undone!')  {
+    if (allTasksBtn.classList.contains('active-btn')) {
+      if (el.childNodes[3].textContent === 'Undone!')  {
         el.style.backgroundColor = '#fff';
-        el.childNodes[3].textContent = 'Done!'
-    } else if (el.childNodes[3].textContent === 'Done!') {
+        el.childNodes[3].textContent = 'Done!';
+        el.childNodes[3].classList.remove('completed')
+      } else if (el.childNodes[3].textContent === 'Done!') {
         el.style.backgroundColor = '#bcdcff';
-        el.childNodes[3].textContent = 'Undone!'
+        el.childNodes[3].textContent = 'Undone!';  
+        el.childNodes[3].classList.add('completed')   
+        el.remove();
+        listContainer.append(el)
+      }
+    } else if (incompleteTasksBtn.classList.contains('active-btn')) {
+      el.setAttribute('style', 'display: none!important')
     }
+    
   }
 
   function onDoneHandler({ target }) {
@@ -249,23 +258,39 @@ const tasks = [];
   }
 
   function onIncompleteTasksHandler() {    
-    Object.entries(objOfTasks).forEach((task, index) => {
-      if (task[1].completed) {
-        let completedTask = document.querySelector(`.tasks-list-section .list-group li:nth-child(${Object.entries(objOfTasks).length-index})`)
-        completedTask.setAttribute('style', 'display: none!important')
-      }
-    })
+    incompleteTasksBtn.classList.add('active-btn');
+    allTasksBtn.classList.remove('active-btn');
+
+    let numOfAllTasks = Object.entries(objOfTasks).length;
+    let arrOfCompleteTasks = Object.entries(objOfTasks).filter((task, index) => {
+          if (task[1].completed) {
+            return task[1]
+          }    
+        });
+    let numOfCompleteTasks = arrOfCompleteTasks.length
+    for (let i = 1; i <= numOfCompleteTasks; i++) {
+      let completedTask = document.querySelector(`.tasks-list-section .list-group li:nth-child(${numOfAllTasks-numOfCompleteTasks+i})`)
+      completedTask.setAttribute('style', 'display: none!important')
+    }
   }  
 
   function onAllTasksHandler() {
-    Object.entries(objOfTasks).forEach((task, index) => {
+    incompleteTasksBtn.classList.remove('active-btn');
+    allTasksBtn.classList.add('active-btn')
 
-      if (task[1].completed) {
-        let completedTask = document.querySelector(`.tasks-list-section .list-group li:nth-child(${Object.entries(objOfTasks).length-index})`)
-        completedTask.setAttribute('style', 'display: flex!important')
-        completedTask.style.backgroundColor = '#bcdcff';
-      }
-    })
+    let numOfAllTasks = Object.entries(objOfTasks).length;
+    let arrOfCompleteTasks = Object.entries(objOfTasks).filter((task, index) => {
+          if (task[1].completed) {
+            return task[1]
+          }    
+        });
+    let numOfCompleteTasks = arrOfCompleteTasks.length
+    for (let i = 1; i <= numOfCompleteTasks; i++) {
+      let completedTask = document.querySelector(`.tasks-list-section .list-group li:nth-child(${numOfAllTasks-numOfCompleteTasks+i})`)
+      completedTask.setAttribute('style', 'display: flex!important')
+      completedTask.style.backgroundColor = '#bcdcff';
+      completedTask.childNodes[3].textContent = 'Undone!'
+    }
   }
 
   function onThemeSelectHandler(e) {
