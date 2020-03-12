@@ -2,6 +2,12 @@
 // Список задач
 const tasks = [];
 
+for (let i =  0; i < localStorage.length; i++) {
+  let key = Object.keys(localStorage)[i]
+  tasks.push(JSON.parse(localStorage[key]))
+};
+
+
 (function(arrOfTasks) {
   const objOfTasks = arrOfTasks.reduce((acc, task) => {
     acc[task._id] = task;
@@ -93,7 +99,7 @@ const tasks = [];
   const allTasksBtn = document.getElementById('all-tasks-btn');
   const incompleteTasksBtn = document.getElementById('incomplete-tasks-btn');
 
-  // Events
+  // Events  
   renderAllTasks(objOfTasks);
   form.addEventListener('submit', onFormSubmitHandler);
   listContainer.addEventListener('click', onDeleteHandler);
@@ -103,20 +109,6 @@ const tasks = [];
   incompleteTasksBtn.addEventListener('click', onIncompleteTasksHandler);
 
   function renderAllTasks(tasksList) {
-    if (!tasksList) {
-      console.error('Передайте список задач!');
-      return;
-    }
-
-    const fragment = document.createDocumentFragment();
-    Object.values(tasksList).forEach(task => {
-      const li = listItemTemplate(task);
-      fragment.appendChild(li);
-    });
-    listContainer.appendChild(fragment);
-  }
-
-  function renderIncompleteTasks(tasksList) {
     if (!tasksList) {
       console.error('Передайте список задач!');
       return;
@@ -140,6 +132,10 @@ const tasks = [];
       'mt-2',
     );
     li.setAttribute('data-task-id', _id);
+    li.style.transition = 'all 2s'
+    if (objOfTasks[_id].completed === true) {
+      li.style.backgroundColor = '#e8f0fe';      
+    } else li.style.backgroundColor = '#fff';
 
     const span = document.createElement('span');
     span.textContent = title;
@@ -154,8 +150,10 @@ const tasks = [];
     article.classList.add('mt-2', 'w-100');
     
     const doneBtn = document.createElement('button');
-    doneBtn.textContent = 'Done!';
-    doneBtn.classList.add('btn', 'btn-default', 'ml-auto', 'done-btn');
+    if (objOfTasks[_id].completed === true) {
+      doneBtn.textContent = 'Undone!';      
+    } else doneBtn.textContent = 'Done!';
+    doneBtn.classList.add('btn', 'btn-default', 'ml-auto', 'done-btn');    
 
     li.appendChild(span);
     li.appendChild(deleteBtn);
@@ -190,6 +188,7 @@ const tasks = [];
     };
 
     objOfTasks[newTask._id] = newTask;
+    localStorage.setItem(newTask._id, JSON.stringify(newTask))
     
     if (Object.keys(objOfTasks).length > 0) {
       emptyMsg.style.display = 'none';
@@ -204,6 +203,7 @@ const tasks = [];
     const isConfirm = confirm(`Do you want to delete this task: ${title}?`);
     if (!isConfirm) return isConfirm;
     delete objOfTasks[id];
+    localStorage.removeItem(id)
     if (Object.keys(objOfTasks).length === 0) {
       emptyMsg.style.display = 'block';
       btnContainer.style.display = 'none';
@@ -230,18 +230,16 @@ const tasks = [];
       if (el.childNodes[3].textContent === 'Undone!')  {
         el.style.backgroundColor = '#fff';
         el.childNodes[3].textContent = 'Done!';
-        el.childNodes[3].classList.remove('completed')
         el.remove();
         listContainer.prepend(el)
       } else if (el.childNodes[3].textContent === 'Done!') {
-        el.style.backgroundColor = '#bcdcff';
+        el.style.backgroundColor = '#e8f0fe';
         el.childNodes[3].textContent = 'Undone!';  
-        el.childNodes[3].classList.add('completed')   
         el.remove();
         listContainer.append(el)
       }
     } else if (incompleteTasksBtn.classList.contains('active-btn')) {
-      el.setAttribute('style', 'display: none!important');
+      el.setAttribute('style', 'display: none!important')
       el.remove();
       listContainer.append(el)
     }
@@ -254,8 +252,10 @@ const tasks = [];
       const id = parent.dataset.taskId;
       if (objOfTasks[id].completed === false) {
         objOfTasks[id].completed = true;
+        localStorage.setItem(id, JSON.stringify(objOfTasks[id]))
       } else {
         objOfTasks[id].completed = false;
+        localStorage.setItem(id, JSON.stringify(objOfTasks[id]))
       }      
       markTaskInHtml(parent);    
     }
@@ -292,7 +292,7 @@ const tasks = [];
     for (let i = 1; i <= numOfCompleteTasks; i++) {
       let completedTask = document.querySelector(`.tasks-list-section .list-group li:nth-child(${numOfAllTasks-numOfCompleteTasks+i})`)
       completedTask.setAttribute('style', 'display: flex!important')
-      completedTask.style.backgroundColor = '#bcdcff';
+      completedTask.style.backgroundColor = '#e8f0fe';
       completedTask.childNodes[3].textContent = 'Undone!'
     }
   }
