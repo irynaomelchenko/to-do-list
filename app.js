@@ -188,7 +188,8 @@ for (let i =  0; i < localStorage.length; i++) {
     };
 
     objOfTasks[newTask._id] = newTask;
-    localStorage.setItem(newTask._id, JSON.stringify(newTask))
+    localStorage.setItem(newTask._id, JSON.stringify(newTask));
+    console.log(objOfTasks);
     
     if (Object.keys(objOfTasks).length > 0) {
       emptyMsg.style.display = 'none';
